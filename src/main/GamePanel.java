@@ -3,17 +3,15 @@ package main;
 import javax.swing.JPanel;
 import java.awt.*;
 import util.KeyHandler;
+import entity.PlayerPlane;
+
 
 public class GamePanel extends JPanel{
     public final int screenWith = 1280, screenHeight = 720;
 
     private KeyHandler keyH = new KeyHandler();
     private GameLoop gameLoop;
-
-
-    private int playerX = 100;
-    private int playerY = 100;
-    private int playerSpeed = 5; // Tốc độ di chuyển: 5 pixel mỗi khung hình
+    private PlayerPlane player = new PlayerPlane(this, keyH);
 
     GamePanel() {
         setPreferredSize(new Dimension(screenWith, screenHeight));
@@ -29,14 +27,7 @@ public class GamePanel extends JPanel{
     }
 
     public void update(){
-        if(keyH.upPressed == true)
-            playerY -= playerSpeed;
-        if(keyH.downPressed == true)
-            playerY += playerSpeed;
-        if(keyH.leftPressed == true)
-            playerX -= playerSpeed;
-        if(keyH.rightPressed == true)
-            playerX += playerSpeed;
+        player.update();
     }
 
     @Override
@@ -46,7 +37,7 @@ public class GamePanel extends JPanel{
         Graphics2D g2 = (Graphics2D) g; // Ép kiểu để dùng nhiều tính năng vẽ hơn
 
         g2.setColor(Color.RED);
-        g2.fillRect(playerX, playerY, 50, 50);
+        player.draw(g2);
 
         g2.dispose(); // Giải phóng tài nguyên bộ nhớ
     }
