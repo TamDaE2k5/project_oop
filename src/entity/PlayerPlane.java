@@ -4,8 +4,7 @@ import util.KeyHandler;
 import main.GamePanel;
 import java.awt.*;
 
-public class PlayerPlane {
-    private int x, y, speed;
+public class PlayerPlane extends Entity {
 
     private GamePanel panel;
     private KeyHandler keyH;
@@ -16,7 +15,7 @@ public class PlayerPlane {
     }
 
     public void setDefaultValue(){
-        x = 100; y = 100; speed = 5;
+        x = 100; y = 100; speed = 5; sizeHeight = 30; sizeWith = 30;
     }
 
     // player act 1 -> handler key
@@ -29,11 +28,21 @@ public class PlayerPlane {
             x -= speed;
         if(keyH.rightPressed)
             x += speed;
+
+//        add limit for screen
+        if(x<0)
+            x = 0;
+        if(y<0)
+            y=0;
+        if(x > panel.screenWith - sizeWith)
+            x = panel.screenWith - sizeWith;
+        if(y > panel.screenHeight - sizeHeight)
+            y = panel.screenHeight - sizeHeight;
     }
 
     // player act 2 -> draw -> repaint
     public void draw(Graphics2D g){
         g.setColor(Color.WHITE);
-        g.fillRect(x, y, 30, 30);
+        g.fillRect(x, y, sizeWith, sizeHeight);
     }
 }
