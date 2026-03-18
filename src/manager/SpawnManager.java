@@ -1,7 +1,6 @@
 package manager;
 
 import entity.Enemy;
-import entity.Entity;
 import entity.PlayerPlane;
 import main.GamePanel;
 
@@ -21,7 +20,7 @@ public class SpawnManager {
     }
 
     public void spawnEnemy(){
-        int randomX = random.nextInt(panel.screenWith+100), randomY = random.nextInt(panel.screenHeight+100);
+        int randomX = random.nextInt(this.player.x+1280), randomY = random.nextInt(this.player.y+720);
 
         Enemy e = new Enemy(randomX,randomY, this.player);
         enemies.add(e);
@@ -30,14 +29,17 @@ public class SpawnManager {
     //    action 1 update
     public void update(){
         time++;
-        if(time>=120){
+        if(time>=60){
             time = 0;
             spawnEnemy();
         }
 
-        for(int i=0; i<enemies.size(); i++) {
+//  tranh truong hop xoa i=1 roi thi lai khong duyet duoc i=1 nua vi du [1,2,3] xoa 2 roi con [1,3] nhung khi goi lai for thi end for roi
+        for(int i=enemies.size()-1; i>=0; i--) {
             Enemy e = enemies.get(i);
             e.update();
+            if(e.isOffScreen(panel.screenWith, panel.screenHeight))
+                enemies.remove(i);
         }
     }
 
