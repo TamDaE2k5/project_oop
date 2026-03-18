@@ -19,6 +19,7 @@ public class PlayerPlane extends Entity {
     }
 
     // player act 1 -> handler key
+    @Override
     public void update(){
         if(keyH.upPressed)
             y -= speed;
@@ -41,6 +42,7 @@ public class PlayerPlane extends Entity {
     }
 
     // player act 2 -> draw -> repaint
+    @Override
     public void draw(Graphics2D g){
         g.setColor(Color.WHITE);
         g.fillRect(x, y, sizeWith, sizeHeight);

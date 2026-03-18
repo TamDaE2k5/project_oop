@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 import java.awt.*;
 import util.KeyHandler;
 import entity.PlayerPlane;
-
+import manager.SpawnManager;
 
 public class GamePanel extends JPanel{
     public final int screenWith = 1280, screenHeight = 720;
@@ -12,6 +12,7 @@ public class GamePanel extends JPanel{
     private KeyHandler keyH = new KeyHandler();
     private GameLoop gameLoop;
     private PlayerPlane player = new PlayerPlane(this, keyH);
+    private SpawnManager spawnManager = new SpawnManager(this, player);
 
     GamePanel() {
         setPreferredSize(new Dimension(screenWith, screenHeight));
@@ -28,6 +29,8 @@ public class GamePanel extends JPanel{
 
     public void update(){
         player.update();
+
+        spawnManager.update();
     }
 
     @Override
@@ -38,6 +41,7 @@ public class GamePanel extends JPanel{
 
         g2.setColor(Color.RED);
         player.draw(g2);
+        spawnManager.draw(g2);
 
         g2.dispose(); // Giải phóng tài nguyên bộ nhớ
     }
