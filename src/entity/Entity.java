@@ -1,6 +1,6 @@
 package entity;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 
 public class Entity {
     public int x, y, speed;
@@ -16,5 +16,10 @@ public class Entity {
 //    act 2 draw
     public void draw(Graphics2D g){
 
+    }
+
+//   act create rectangle arround entity
+    public Rectangle getBounds(){
+        return new Rectangle(x, y, sizeWith, sizeHeight);
     }
 }
