@@ -38,6 +38,8 @@ public class GamePanel extends JPanel{
 
             if(collisionManager.checkPlayerAndEnemy())
                 isGameOver = true;
+            if(collisionManager.checkExplosion())
+                isGameOver = true;
         }
     }
 
