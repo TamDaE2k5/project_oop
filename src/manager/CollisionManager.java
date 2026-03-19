@@ -22,8 +22,10 @@ public class CollisionManager {
 
             Rectangle enemyBox = e.getBounds();
 
-            if(playerBox.intersects(enemyBox))
+            if(playerBox.intersects(enemyBox)) {
+                spawnManager.meteorites.remove(i);
                 return true;
+            }
         }
         return false;
     }
@@ -31,16 +33,10 @@ public class CollisionManager {
     public boolean checkExplosion(){
         for(int i=0; i<spawnManager.stars.size(); i++){
             Star s = spawnManager.stars.get(i);
+            int starX = s.x + s.sizeWith/2, starY = s.y + s.sizeHeight/2;
+
             if(s.state == Entity.State.EXPLODING){
-                int starX = s.x + s.sizeWith/2, starY = s.y + s.sizeHeight/2;
-
-                int  playerX = player.x + player.sizeWith/2, playerY = player.y + player.sizeHeight/2;
-
-                double distanceToPlayer = Math.sqrt(Math.pow(playerX-starX, 2) + Math.pow(playerY-starY, 2));
-                if(distanceToPlayer<=s.currentExplosionRadius)
-                    return true;
-
-//                check meteorite
+                //                check meteorite
                 for(int j=spawnManager.meteorites.size()-1; j>=0; j--){
                     Meteorite m = spawnManager.meteorites.get(j);
 
@@ -49,6 +45,14 @@ public class CollisionManager {
                     double distanceToMeteorite = Math.sqrt(Math.pow(meteoriteX-starX, 2) + Math.pow(meteoriteY - starY, 2));
                     if(distanceToMeteorite<=s.currentExplosionRadius)
                         spawnManager.meteorites.remove(j);
+                }
+
+                int  playerX = player.x + player.sizeWith/2, playerY = player.y + player.sizeHeight/2;
+
+                double distanceToPlayer = Math.sqrt(Math.pow(playerX-starX, 2) + Math.pow(playerY-starY, 2));
+                if(distanceToPlayer<=s.currentExplosionRadius) {
+                    spawnManager.stars.remove(i);
+                    return true;
                 }
             }
         }

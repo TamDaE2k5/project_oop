@@ -14,8 +14,10 @@ public class PlayerPlane extends Entity {
         setDefaultValue();
     }
 
+    public int currentHP, currentBullet;
     public void setDefaultValue(){
         x = 100; y = 100; speed = 5; sizeHeight = 30; sizeWith = 30;
+        currentBullet = 0; currentHP = 5;
     }
 
     // player act 1 -> handler key

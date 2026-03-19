@@ -37,8 +37,11 @@ public class GamePanel extends JPanel{
             spawnManager.update();
 
             if(collisionManager.checkPlayerAndEnemy())
-                isGameOver = true;
+                player.currentHP -= 2;
             if(collisionManager.checkExplosion())
+                player.currentHP -= 5;
+
+            if(player.currentHP <= 0)
                 isGameOver = true;
         }
     }
@@ -66,6 +69,13 @@ public class GamePanel extends JPanel{
 
             g2.drawString(text, textX, textY);
         }
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 20));
+        g2.drawString("Đạn: " + player.currentBullet, 20, 30); // Căn ở góc trên bên trái
+        // Vẽ chữ HP
+        g2.drawString("Máu: " + player.currentHP, 20, 60);
+
 
         g2.dispose(); // Giải phóng tài nguyên bộ nhớ
     }

@@ -30,7 +30,8 @@ public class SpawnManager {
     }
 
     public void spawnEnemy(){
-        int randomX = random.nextInt(this.player.x+1280), randomY = random.nextInt(this.player.y+720);
+        int randomX = random.nextInt(this.player.x+1280)+this.player.x,
+                randomY = random.nextInt(this.player.y+720)+this.player.y;
 
         countTimeSpawnMeteorite++;
         countTimeSpawnStar++;
@@ -40,7 +41,7 @@ public class SpawnManager {
             meteorites.add(m);
         }
 
-        if(countTimeSpawnStar>=300){
+        if(countTimeSpawnStar>=240){
             countTimeSpawnStar = 0;
             Star s = new Star(random.nextInt(panel.screenWith), random.nextInt(panel.screenHeight));
             stars.add(s);
