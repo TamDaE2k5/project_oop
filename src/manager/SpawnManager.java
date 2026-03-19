@@ -2,6 +2,8 @@ package manager;
 
 import entity.Enemy;
 import entity.PlayerPlane;
+import entity.Star;
+
 import main.GamePanel;
 
 import java.util.*;
@@ -11,12 +13,19 @@ public class SpawnManager {
     private GamePanel panel;
     private PlayerPlane player;
     private Random random;
+
     public ArrayList<Enemy> enemies;
+    public ArrayList<Star> stars;
+
     private int time = 0;
 
     public SpawnManager(GamePanel panel, PlayerPlane player){
         this.panel = panel; this.player = player;
-        this.enemies = new ArrayList<>();  this.random = new Random();
+
+        this.enemies = new ArrayList<>();
+        this.stars = new ArrayList<>();
+
+        this.random = new Random();
     }
 
     public void spawnEnemy(){
@@ -24,6 +33,9 @@ public class SpawnManager {
 
         Enemy e = new Enemy(randomX,randomY, this.player);
         enemies.add(e);
+
+        Star s = new Star(panel);
+        stars.add(s);
     }
 
     //    action 1 update
@@ -41,6 +53,11 @@ public class SpawnManager {
             if(e.isOffScreen(panel.screenWith, panel.screenHeight))
                 enemies.remove(i);
         }
+
+        for(int i=stars.size()-1; i>=0; i--){
+            Star s = stars.get(i);
+            s.update();
+        }
     }
 
 
@@ -48,9 +65,12 @@ public class SpawnManager {
     public void draw(Graphics2D g){
         g.setColor(Color.red);
 
-        for(int i=0; i<enemies.size(); i++){
-            Enemy e = enemies.get(i);
+        for (Enemy e : enemies) {
             e.draw(g);
+        }
+
+        for(Star s:stars){
+            s.draw(g);
         }
     }
 }
