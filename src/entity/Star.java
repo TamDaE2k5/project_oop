@@ -43,6 +43,7 @@ public class Star extends Entity{
 
             if (timer >= explosionDuration) {
                 state = State.DONE;
+
             }
         }
     }

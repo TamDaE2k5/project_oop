@@ -1,9 +1,6 @@
 package manager;
 
-import entity.Entity;
-import entity.Meteorite;
-import entity.PlayerPlane;
-import entity.Star;
+import entity.*;
 
 import main.GamePanel;
 
@@ -14,37 +11,56 @@ public class SpawnManager {
     private GamePanel panel;
     private PlayerPlane player;
     private Random random;
+    private SoundManager soundManager;
 
     public ArrayList<Meteorite> meteorites;
     public ArrayList<Star> stars;
+    public ArrayList<Item> items;
 
-    private int countTimeSpawnMeteorite = 0, countTimeSpawnStar = 0;
+    private int countTimeSpawnMeteorite = 0, countTimeSpawnStar = 0,
+            countTimeSpawnItem = 0;
 
     public SpawnManager(GamePanel panel, PlayerPlane player){
         this.panel = panel; this.player = player;
+        this.soundManager = new SoundManager();
 
         this.meteorites = new ArrayList<>();
         this.stars = new ArrayList<>();
+        this.items = new ArrayList<>();
 
         this.random = new Random();
     }
 
+    public int time = 0;
     public void spawnEnemy(){
+        time++;
         int randomX = random.nextInt(this.player.x+1280)+this.player.x,
                 randomY = random.nextInt(this.player.y+720)+this.player.y;
 
         countTimeSpawnMeteorite++;
         countTimeSpawnStar++;
+        countTimeSpawnItem++;
+
         if(countTimeSpawnMeteorite>=60){
             countTimeSpawnMeteorite = 0;
             Meteorite m = new Meteorite(randomX,randomY, this.player);
             meteorites.add(m);
+//            soundManager.playSFX("thang_nao_co_tien.wav");
         }
 
         if(countTimeSpawnStar>=240){
             countTimeSpawnStar = 0;
-            Star s = new Star(random.nextInt(panel.screenWith), random.nextInt(panel.screenHeight));
+            Star s = new Star(random.nextInt(panel.screenWith-50)+50, random.nextInt(panel.screenHeight-50)+50);
             stars.add(s);
+            soundManager.playSFX("chay_di_cac_chau_oi.wav");
+            time=0;
+        }
+
+        if(countTimeSpawnItem>=300){
+            countTimeSpawnItem = 0;
+            Item i = new Item(random.nextInt(panel.screenWith-100)+100, random.nextInt(panel.screenHeight-100)+100,
+                    random.nextBoolean()? Item.ItemType.Bullet: Item.ItemType.HP);
+            items.add(i);
         }
     }
 
@@ -65,6 +81,13 @@ public class SpawnManager {
             if(s.state == Entity.State.DONE)
                 stars.remove(i);
         }
+
+        for(int i=items.size()-1; i>=0; i--){
+            Item it = items.get(i);
+            it.update();
+            if(it.timeToLive<=0)
+                items.remove(i);
+        }
     }
 
 
@@ -79,5 +102,8 @@ public class SpawnManager {
         for(Star s:stars){
             s.draw(g);
         }
+
+        for(Item i:items)
+            i.draw(g);
     }
 }

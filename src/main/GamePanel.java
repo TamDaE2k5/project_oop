@@ -4,8 +4,10 @@ import javax.swing.JPanel;
 import java.awt.*;
 import util.KeyHandler;
 import entity.PlayerPlane;
+
 import manager.SpawnManager;
 import manager.CollisionManager;
+import manager.SoundManager;
 
 public class GamePanel extends JPanel{
     public final int screenWith = 1280, screenHeight = 720;
@@ -13,9 +15,11 @@ public class GamePanel extends JPanel{
 
     private KeyHandler keyH = new KeyHandler();
     private GameLoop gameLoop;
+
     private PlayerPlane player = new PlayerPlane(this, keyH);
     private SpawnManager spawnManager = new SpawnManager(this, player);
     private CollisionManager collisionManager = new CollisionManager(spawnManager, player);
+    private SoundManager soundManager = new SoundManager();
 
     GamePanel() {
         setPreferredSize(new Dimension(screenWith, screenHeight));
@@ -28,6 +32,8 @@ public class GamePanel extends JPanel{
 
     public void startGame(){
         GameLoop gameLoop =  new GameLoop(this);
+
+//        soundManager.playBGM("do_thang_cho.wav");
     }
 
     public void update(){
@@ -41,8 +47,10 @@ public class GamePanel extends JPanel{
             if(collisionManager.checkExplosion())
                 player.currentHP -= 5;
 
-            if(player.currentHP <= 0)
+            if(player.currentHP <= 0) {
                 isGameOver = true;
+//                soundManager.stopBGM();
+            }
         }
     }
 
