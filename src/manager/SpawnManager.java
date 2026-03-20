@@ -16,6 +16,7 @@ public class SpawnManager {
     public ArrayList<Meteorite> meteorites;
     public ArrayList<Star> stars;
     public ArrayList<Item> items;
+    public ArrayList<Bullet> bullets;
 
     private int countTimeSpawnMeteorite = 0, countTimeSpawnStar = 0,
             countTimeSpawnItem = 0;
@@ -27,6 +28,7 @@ public class SpawnManager {
         this.meteorites = new ArrayList<>();
         this.stars = new ArrayList<>();
         this.items = new ArrayList<>();
+        this.bullets = new ArrayList<>();
 
         this.random = new Random();
     }
@@ -48,7 +50,7 @@ public class SpawnManager {
 //            soundManager.playSFX("thang_nao_co_tien.wav");
         }
 
-        if(countTimeSpawnStar>=240){
+        if(countTimeSpawnStar>=360){
             countTimeSpawnStar = 0;
             Star s = new Star(random.nextInt(panel.screenWith-50)+50, random.nextInt(panel.screenHeight-50)+50);
             stars.add(s);
@@ -67,6 +69,10 @@ public class SpawnManager {
     //    action 1 update
     public void update(){
         spawnEnemy();
+        if(player.canShoot()){
+            player.currentBullet--;
+            bullets.add(new Bullet(player.x, player.y, player.degree));
+        }
 //  tranh truong hop xoa i=1 roi thi lai khong duyet duoc i=1 nua vi du [1,2,3] xoa 2 roi con [1,3] nhung khi goi lai for thi end for roi
         for(int i=meteorites.size()-1; i>=0; i--) {
             Meteorite m = meteorites.get(i);
@@ -88,6 +94,13 @@ public class SpawnManager {
             if(it.timeToLive<=0)
                 items.remove(i);
         }
+
+        for(int i=bullets.size()-1; i>=0; i--){
+            Bullet b = bullets.get(i);
+            b.update();
+            if(b.isOutScreen())
+                bullets.remove(i);
+        }
     }
 
 
@@ -105,5 +118,8 @@ public class SpawnManager {
 
         for(Item i:items)
             i.draw(g);
+
+        for(Bullet b:bullets)
+            b.draw(g);
     }
 }
