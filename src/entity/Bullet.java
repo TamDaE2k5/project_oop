@@ -9,8 +9,6 @@ public class Bullet extends Entity{
     private double exactX, exactY; // toa do di chuyen
     private double dx, dy; // vector di chuyen
 
-    private GamePanel panel;
-
     public Bullet(int startX, int startY, int degree){
         exactX = startX; exactY = startY;
 
@@ -23,7 +21,7 @@ public class Bullet extends Entity{
     }
 
     public boolean isOutScreen(){
-        return x > panel.screenWith + 100 || y > panel.screenHeight + 100
+        return x > 1280 + 100 || y > 720 + 100
                 || x < -100 || y < -100;
     }
 
