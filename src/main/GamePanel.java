@@ -42,8 +42,7 @@ public class GamePanel extends JPanel{
 
             spawnManager.update();
 
-            if(collisionManager.checkPlayerAndEnemy())
-                player.currentHP -= 2;
+            collisionManager.checkAllCollisions();
             if(collisionManager.checkExplosion())
                 player.currentHP -= 5;
 

@@ -15,11 +15,14 @@ public class Rocket extends Entity{
         this.target = target;
         sizeWith = 25; sizeHeight = 25;
 
-        x = startX; y = startY; speed = 4;
+        x = startX; y = startY; speed = 4; timeToLive = 300;
     }
 
     @Override
     public void update(){
+        if(timeToLive>0)
+            timeToLive--;
+
         double dx = target.x - this.x;
         double dy = target.y - this.y;
 
@@ -35,5 +38,10 @@ public class Rocket extends Entity{
     public void draw(Graphics2D g){
         g.setColor(Color.cyan);
         g.fillRect(x,y,sizeWith,sizeHeight);
+    }
+
+    private int timeToLive;
+    public boolean isAlive(){
+        return timeToLive <= 0;
     }
 }

@@ -1,9 +1,7 @@
 package manager;
 
-import entity.Entity;
-import entity.Meteorite;
-import entity.Star;
-import entity.PlayerPlane;
+import entity.*;
+
 import java.awt.*;
 
 public class CollisionManager {
@@ -14,20 +12,78 @@ public class CollisionManager {
         this.spawnManager = spawnManager; this.player = player;
     }
 
-    public boolean checkPlayerAndEnemy(){
-        Rectangle playerBox = player.getBounds();
+    public boolean checkPlayerAndEnemy(Entity e1, Entity e2){
+        Rectangle box1 = e1.getBounds();
+        Rectangle box2 = e2.getBounds();
+        return box1.intersects(box2);
+    }
 
-        for (int i = 0; i < spawnManager.meteorites.size(); i++) {
-            Meteorite e = spawnManager.meteorites.get(i);
-
-            Rectangle enemyBox = e.getBounds();
-
-            if(playerBox.intersects(enemyBox)) {
+    public void checkAllCollisions(){
+//        meteorite
+        for(int i=spawnManager.meteorites.size()-1; i>=0; i--){
+            Meteorite m = spawnManager.meteorites.get(i);
+            if(checkPlayerAndEnemy(player, m)){
+                player.currentHP -= 2;
                 spawnManager.meteorites.remove(i);
-                return true;
             }
         }
-        return false;
+
+//        item
+        for(int i=spawnManager.items.size()-1; i>=0; i--){
+            Item it = spawnManager.items.get(i);
+            if(checkPlayerAndEnemy(player, it)){
+                if(it.type == Item.ItemType.HP){
+                    player.currentHP += 2;
+                }
+
+                else if(it.type == Item.ItemType.Bullet){
+                    player.currentBullet += 10;
+                }
+
+                spawnManager.items.remove(i);
+            }
+
+        }
+
+//        rocket
+        for(int i=spawnManager.rockets.size()-1; i>=0; i--){
+            Rocket r = spawnManager.rockets.get(i);
+            if(checkPlayerAndEnemy(player, r)){
+                spawnManager.rockets.remove(i);
+                player.currentHP -= 4;
+            }
+        }
+
+//        bullet
+        for(int i=spawnManager.bullets.size()-1; i>=0; i--){
+            Bullet b = spawnManager.bullets.get(i);
+
+//            meteorite
+            for (int j = spawnManager.meteorites.size()-1; j >=0; j--) {
+                Meteorite m = spawnManager.meteorites.get(j);
+                if(checkPlayerAndEnemy(b, m)){
+                    spawnManager.meteorites.remove(j);
+                    spawnManager.bullets.remove(i);
+
+                    //                    cong score
+
+
+                }
+            }
+
+//            rocket
+            for (int j = spawnManager.rockets.size()-1; j >=0; j--) {
+                Rocket m = spawnManager.rockets.get(j);
+                if(checkPlayerAndEnemy(b, m)){
+                    spawnManager.rockets.remove(j);
+                    spawnManager.bullets.remove(i);
+
+                    //                    cong score
+
+
+                }
+            }
+        }
     }
 
     public boolean checkExplosion(){

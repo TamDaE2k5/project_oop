@@ -113,6 +113,8 @@ public class SpawnManager {
         for(int i=rockets.size()-1; i>=0; i--){
             Rocket r = rockets.get(i);
             r.update();
+            if(r.isAlive())
+                rockets.remove(i);
         }
     }
 
