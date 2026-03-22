@@ -140,4 +140,18 @@ public class SpawnManager {
         for(Rocket r:rockets)
             r.draw(g);
     }
+
+    public void reset(){
+        meteorites.clear();
+        stars.clear();
+        items.clear();
+        bullets.clear();
+        rockets.clear();
+
+        countTimeSpawnMeteorite = 0;
+        countTimeSpawnStar = 0;
+        countTimeSpawnItem = 0;
+        countTimeSpawnRocket = 0;
+        time = 0;
+    }
 }

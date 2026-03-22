@@ -3,13 +3,15 @@ package manager;
 import entity.*;
 
 import java.awt.*;
+import main.GamePanel;
 
 public class CollisionManager {
     private PlayerPlane player;
     private SpawnManager spawnManager;
+    private GamePanel panel;
 
-    public CollisionManager(SpawnManager spawnManager, PlayerPlane player){
-        this.spawnManager = spawnManager; this.player = player;
+    public CollisionManager(SpawnManager spawnManager, PlayerPlane player, GamePanel panel){
+        this.spawnManager = spawnManager; this.player = player;this.panel = panel;
     }
 
     public boolean checkPlayerAndEnemy(Entity e1, Entity e2){
@@ -65,7 +67,7 @@ public class CollisionManager {
                     spawnManager.meteorites.remove(j);
                     spawnManager.bullets.remove(i);
 
-                    //                    cong score
+                    panel.addScore(10);
 
 
                 }
@@ -78,7 +80,7 @@ public class CollisionManager {
                     spawnManager.rockets.remove(j);
                     spawnManager.bullets.remove(i);
 
-                    //                    cong score
+                    panel.addScore(20);
 
 
                 }

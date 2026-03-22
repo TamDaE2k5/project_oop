@@ -3,21 +3,31 @@ package entity;
 import util.KeyHandler;
 import main.GamePanel;
 import java.awt.*;
+import javax.imageio.ImageIO;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class PlayerPlane extends Entity {
 
     private GamePanel panel;
     private KeyHandler keyH;
+    private BufferedImage planeImg;
 
     public PlayerPlane(GamePanel panel, KeyHandler keyH){
         this.panel = panel; this.keyH = keyH;
         setDefaultValue();
+        try{
+            planeImg = ImageIO.read(getClass().getResource("/Images/combatjet-highres.png"));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public int currentHP, currentBullet, degree, timeWaitBullet;
     public void setDefaultValue(){
         x = 100; y = 100; speed = 5; sizeHeight = 30; sizeWith = 30;
-        currentBullet = 500; currentHP = 500;
+        currentBullet = 500; currentHP = 50;
         degree = 270; // !
         timeWaitBullet = 10;
     }
@@ -50,8 +60,17 @@ public class PlayerPlane extends Entity {
     // player act 2 -> draw -> repaint
     @Override
     public void draw(Graphics2D g){
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, sizeWith, sizeHeight);
+        if (planeImg != null) {
+            AffineTransform oldTransform = g.getTransform();
+            double cx = x + sizeWith / 2.0;
+            double cy = y + sizeHeight / 2.0;
+            g.rotate(Math.toRadians(degree), cx, cy);
+            g.drawImage(planeImg, x, y, sizeWith, sizeHeight, null);
+            g.setTransform(oldTransform);
+        } else {
+            g.setColor(Color.WHITE);
+            g.fillRect(x, y, sizeWith, sizeHeight);
+        }
     }
 
 //    player act 3 -> shoot
