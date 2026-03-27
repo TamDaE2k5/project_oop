@@ -35,9 +35,9 @@ public class SpawnManager {
         this.random = new Random();
     }
 
-    public int time = 0;
+//    public int time = 0;
     public void spawnEnemy(){
-        time++;
+//        time++;
 
         countTimeSpawnMeteorite++;
         countTimeSpawnStar++;
@@ -56,8 +56,8 @@ public class SpawnManager {
             countTimeSpawnStar = 0;
             Star s = new Star(random.nextInt(panel.screenWith-50)+50, random.nextInt(panel.screenHeight-50)+50);
             stars.add(s);
-            soundManager.playSFX("chay_di_cac_chau_oi.wav");
-            time=0;
+//            soundManager.playSFX("chay_di_cac_chau_oi.wav");
+//            time=0;
         }
 
         if(countTimeSpawnItem>=300){

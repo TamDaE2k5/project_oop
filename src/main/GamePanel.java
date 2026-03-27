@@ -40,7 +40,7 @@ public class GamePanel extends JPanel{
     public void startGame(){
         GameLoop gameLoop =  new GameLoop(this);
 
-//        soundManager.playBGM("do_thang_cho.wav");
+        soundManager.playBGM("do_thang_cho.wav");
     }
 
     public void update(){
@@ -54,7 +54,7 @@ public class GamePanel extends JPanel{
 
             if(player.currentHP <= 0) {
                 isGameOver = true;
-//                soundManager.stopBGM();
+                soundManager.stopBGM();
             }
         }else if(keyH.restartPressed){
             restartGame();
