@@ -40,7 +40,8 @@ public class GamePanel extends JPanel{
     public void startGame(){
         GameLoop gameLoop =  new GameLoop(this);
 
-//        soundManager.playBGM("do_thang_cho.wav");
+//        soundManager.playBGM("bg1.wav");
+
     }
 
     public void update(){
@@ -58,7 +59,7 @@ public class GamePanel extends JPanel{
             }
         }else if(keyH.restartPressed){
             restartGame();
-//            soundManager.playBGM("do_thang_cho.wav");
+//            soundManager.playBGM("bg1.wav");
         }
     }
 

@@ -14,11 +14,12 @@ import javax.imageio.ImageIO;
 public class CollisionManager {
     private PlayerPlane player;
     private SpawnManager spawnManager;
+    private SoundManager soundManager;
     private GamePanel panel;
     private BufferedImage MPImg, RMImg, RPImg, BMImg, BRImg;
     public CollisionManager(SpawnManager spawnManager, PlayerPlane player, GamePanel panel){
         this.spawnManager = spawnManager; this.player = player;this.panel = panel;
-
+        this.soundManager = new SoundManager();
 
         try{
             MPImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Images/flash00.png")));
@@ -44,6 +45,7 @@ public class CollisionManager {
             if(checkPlayerAndEnemy(player, m)){
                 player.currentHP -= 2;
                 spawnManager.hitEffects.add(new HitEffect(m.x,m.y,MPImg));
+                soundManager.playSFX("explosion.wav");
                 spawnManager.meteorites.remove(i);
             }
         }
@@ -72,6 +74,7 @@ public class CollisionManager {
             if(checkPlayerAndEnemy(player, r)){
                 spawnManager.rockets.remove(i);
                 spawnManager.hitEffects.add(new HitEffect(r.x,r.y,RPImg));
+                soundManager.playSFX("explosion.wav");
                 player.currentHP -= 4;
             }
 
@@ -82,6 +85,7 @@ public class CollisionManager {
                     spawnManager.rockets.remove(i);
                     spawnManager.meteorites.remove(j);
                     spawnManager.hitEffects.add(new HitEffect(m.x, m.y, RMImg));
+                    soundManager.playSFX("explosion.wav");
                     panel.addScore(10);
                 }
             }
@@ -98,6 +102,7 @@ public class CollisionManager {
                     spawnManager.meteorites.remove(j);
                     spawnManager.bullets.remove(i);
                     spawnManager.hitEffects.add(new HitEffect(m.x, m.y, BMImg));
+                    soundManager.playSFX("explosion.wav");
                     panel.addScore(10);
 
                 }
@@ -110,6 +115,7 @@ public class CollisionManager {
                     spawnManager.rockets.remove(j);
                     spawnManager.bullets.remove(i);
                     spawnManager.hitEffects.add(new HitEffect(r.x, r.y, BRImg));
+                    soundManager.playSFX("explosion.wav");
                     panel.addScore(20);
 
                 }
@@ -118,7 +124,8 @@ public class CollisionManager {
     }
 
     public boolean checkExplosion(){
-        for(int i=0; i<spawnManager.stars.size(); i++){
+        boolean isPlayerHit = false;
+        for(int i=spawnManager.stars.size()-1; i>=0; i--){
             Star s = spawnManager.stars.get(i);
             int starX = s.x + s.sizeWith/2, starY = s.y + s.sizeHeight/2;
 
@@ -141,9 +148,9 @@ public class CollisionManager {
                     Rocket r = spawnManager.rockets.get(j);
                     int rocketX = r.x + r.sizeWith/2, rocketY = r.y + r.sizeHeight/2;
 
-                    double distanceToMeteorite = Math.sqrt(Math.pow(rocketX-starX, 2) + Math.pow(rocketY - starY, 2));
-                    if(distanceToMeteorite<=s.currentExplosionRadius) {
-                        spawnManager.meteorites.remove(j);
+                    double distanceToRocket = Math.sqrt(Math.pow(rocketX-starX, 2) + Math.pow(rocketY - starY, 2));
+                    if(distanceToRocket<=s.currentExplosionRadius) {
+                        spawnManager.rockets.remove(j);
                         panel.addScore(15);
                     }
                 }
@@ -152,12 +159,11 @@ public class CollisionManager {
 
                 double distanceToPlayer = Math.sqrt(Math.pow(playerX-starX, 2) + Math.pow(playerY-starY, 2));
                 if(distanceToPlayer<=s.currentExplosionRadius) {
-                    spawnManager.stars.remove(i);
-                    return true;
+                    isPlayerHit=true;
                 }
             }
         }
-        return false;
+        return isPlayerHit;
     }
 
 

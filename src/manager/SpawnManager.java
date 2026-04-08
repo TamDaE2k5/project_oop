@@ -155,6 +155,7 @@ public class SpawnManager {
         items.clear();
         bullets.clear();
         rockets.clear();
+        hitEffects.clear();
 
         countTimeSpawnMeteorite = 0;
         countTimeSpawnStar = 0;

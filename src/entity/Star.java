@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 import main.GamePanel;
+import manager.SoundManager;
 
 public class Star extends Entity{
 
@@ -21,6 +22,8 @@ public class Star extends Entity{
     // image
     private BufferedImage explosionImg;
     private BufferedImage starImg;
+    // sound
+    private SoundManager soundManager;
 
     public Star(int startX, int startY){
         this.sizeWith = 50; this.sizeHeight = 50;
@@ -29,7 +32,7 @@ public class Star extends Entity{
 
         this.state = State.COUNTDOWN;
 
-        loadImages();
+        loadImages(); soundManager = new SoundManager();
     }
 
     @Override
@@ -56,13 +59,12 @@ public class Star extends Entity{
 
 //        state 2
         else if (state == State.EXPLODING) {
-            // Tính toán bán kính nổ lan rộng theo thời gian (animation)
+            // Tính toán bán kính nổ lan rộng theo thời gian
             // currentRadius tăng dần từ 0 đến explosionRadius trong explosionDuration giây
             currentExplosionRadius = (int) (((double) timer / explosionDuration) * explosionRadius);
-
             if (timer >= explosionDuration) {
                 state = State.DONE;
-
+                soundManager.playSFX("explosion.wav");
             }
         }
     }
