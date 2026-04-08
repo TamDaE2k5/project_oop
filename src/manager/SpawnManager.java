@@ -18,6 +18,7 @@ public class SpawnManager {
     public ArrayList<Item> items;
     public ArrayList<Bullet> bullets;
     public ArrayList<Rocket> rockets;
+    public ArrayList<HitEffect> hitEffects;
 
     private int countTimeSpawnMeteorite = 0, countTimeSpawnStar = 0,
             countTimeSpawnItem = 0, countTimeSpawnRocket = 0;
@@ -31,14 +32,12 @@ public class SpawnManager {
         this.items = new ArrayList<>();
         this.bullets = new ArrayList<>();
         this.rockets = new ArrayList<>();
+        this.hitEffects = new ArrayList<>();
 
         this.random = new Random();
     }
 
-//    public int time = 0;
     public void spawnEnemy(){
-//        time++;
-
         countTimeSpawnMeteorite++;
         countTimeSpawnStar++;
         countTimeSpawnItem++;
@@ -78,7 +77,6 @@ public class SpawnManager {
     public void update(){
         spawnEnemy();
         if(player.canShoot()){
-            player.currentBullet--;
             bullets.add(new Bullet(player.x, player.y, player.degree));
         }
 //  tranh truong hop xoa i=1 roi thi lai khong duyet duoc i=1 nua vi du [1,2,3] xoa 2 roi con [1,3] nhung khi goi lai for thi end for roi
@@ -116,6 +114,13 @@ public class SpawnManager {
             if(r.isAlive())
                 rockets.remove(i);
         }
+
+        for(int i=hitEffects.size()-1; i>=0; i--){
+            HitEffect h = hitEffects.get(i);
+            h.update();
+            if(h.isDone())
+                hitEffects.remove(i);
+        }
     }
 
 
@@ -139,6 +144,9 @@ public class SpawnManager {
 
         for(Rocket r:rockets)
             r.draw(g);
+
+        for(HitEffect h:hitEffects)
+            h.draw(g);
     }
 
     public void reset(){
@@ -152,6 +160,5 @@ public class SpawnManager {
         countTimeSpawnStar = 0;
         countTimeSpawnItem = 0;
         countTimeSpawnRocket = 0;
-        time = 0;
     }
 }

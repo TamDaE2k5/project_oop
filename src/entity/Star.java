@@ -1,7 +1,10 @@
 package entity;
 
 import java.awt.*;
-
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
+import javax.imageio.ImageIO;
 import main.GamePanel;
 
 public class Star extends Entity{
@@ -15,12 +18,28 @@ public class Star extends Entity{
 
     private GamePanel panel;
 
+    // image
+    private BufferedImage explosionImg;
+    private BufferedImage starImg;
+
     public Star(int startX, int startY){
         this.sizeWith = 50; this.sizeHeight = 50;
 
         this.x = startX; this.y = startY;
 
         this.state = State.COUNTDOWN;
+
+        loadImages();
+    }
+
+    @Override
+    public void loadImages() {
+        try {
+            starImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Images/Sun_Pixel.png")));
+            explosionImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Images/explosion04.png")));
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -51,33 +70,34 @@ public class Star extends Entity{
     @Override
     public void draw(Graphics2D g){
         if (state == State.COUNTDOWN) {
-
-            // TẠO HIỆU ỨNG NHẤP NHÁY BÁO ĐỘNG (BẬT/TẮT MÀU DỰA TRÊN TIMER)
-            // Cứ mỗi 10 frame (6 lần/giây) lại đổi màu một lần
-            if ((timer / 10) % 2 == 0) {
-                g.setColor(Color.YELLOW);
-            } else {
-                g.setColor(Color.ORANGE);
-            }
-
-            g.fillOval(x, y, sizeWith, sizeHeight);
+            g.drawImage(starImg, x, y, sizeWith, sizeHeight, null);
         }
 
         else if (state == State.EXPLODING) {
-            // VẼ HIỆU ỨNG VÒNG TRÒN NỔ LAN RỘNG (MÀU ĐỎ/TRẮNG)
-            g.setColor(Color.RED);
 
-            // Đặt nét vẽ đậm hơn (3 pixel) để vòng tròn nhìn rõ hơn
-            g.setStroke(new BasicStroke(3));
+            if(explosionImg != null){
+                int diameter = currentExplosionRadius * 2;
 
-            int drawX = x + (sizeWith / 2) - currentExplosionRadius;
-            int drawY = y + (sizeHeight / 2) - currentExplosionRadius;
-            int diameter = currentExplosionRadius * 2;
+                // Tính toán tọa độ X, Y để ảnh nổ xuất hiện TỪ TÂM của Ngôi sao lan ra
+                int drawX = x + (sizeWith / 2) - currentExplosionRadius;
+                int drawY = y + (sizeHeight / 2) - currentExplosionRadius;
 
-            g.drawOval(drawX, drawY, diameter, diameter);
+                // Vẽ ảnh vụ nổ, ép kích thước của ảnh bằng với diameter để tạo hiệu ứng to dần
+                g.drawImage(explosionImg, drawX, drawY, diameter, diameter, null);
+            }
+            else {
+                // VẼ HIỆU ỨNG VÒNG TRÒN NỔ LAN RỘNG (MÀU ĐỎ/TRẮNG)
+                g.setColor(Color.RED);
+                // Đặt nét vẽ đậm hơn (3 pixel) để vòng tròn nhìn rõ hơn
+                g.setStroke(new BasicStroke(3));
 
-            // Giải phóng nét vẽ đậm
-            g.setStroke(new BasicStroke(1));
+                int drawX = x + (sizeWith / 2) - currentExplosionRadius;
+                int drawY = y + (sizeHeight / 2) - currentExplosionRadius;
+                int diameter = currentExplosionRadius * 2;
+                g.drawOval(drawX, drawY, diameter, diameter);
+                // Giải phóng nét vẽ đậm
+                g.setStroke(new BasicStroke(1));
+            }
         }
     }
 }

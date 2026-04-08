@@ -24,6 +24,10 @@ public class Entity {
 
     }
 
+    public void loadImages(){
+
+    }
+
 //   act create rectangle arround entity
     public Rectangle getBounds(){
         return new Rectangle(x, y, sizeWith, sizeHeight);
