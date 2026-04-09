@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.JPanel;
 import java.awt.*;
+import java.util.ArrayList;
+
 import util.KeyHandler;
 import entity.PlayerPlane;
 
@@ -41,7 +43,10 @@ public class GamePanel extends JPanel{
         GameLoop gameLoop =  new GameLoop(this);
 
 //        soundManager.playBGM("bg1.wav");
-
+        ArrayList<String> soundFun = new ArrayList<>();
+        soundFun.add("fun/thang_nao_co_tien.wav"); soundFun.add("fun/nothing_jet.wav"); soundFun.add("fun/uia.wav");
+         soundFun.add("fun/emotional_damage.wav"); soundFun.add("fun/do_thang_cho.wav"); soundFun.add("fun/chay_di_cac_chau_oi.wav");
+        soundManager.playPlaylist(soundFun);
     }
 
     public void update(){
@@ -59,6 +64,7 @@ public class GamePanel extends JPanel{
             }
         }else if(keyH.restartPressed){
             restartGame();
+            soundManager.stopPlaylist();
 //            soundManager.playBGM("bg1.wav");
         }
     }

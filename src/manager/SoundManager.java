@@ -1,9 +1,8 @@
 package manager;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class SoundManager {
     private Clip bgmClip;
@@ -52,5 +51,83 @@ public class SoundManager {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+    }
+
+
+
+
+
+
+
+
+
+    private Clip playlistClip; // Clip fun
+    private ArrayList<String> playlist;
+    private int currentTrackIndex = 0;
+
+    public void playPlaylist(ArrayList<String> tracks) {
+        this.playlist = tracks;
+        this.currentTrackIndex = 0;
+        if (playlist != null && !playlist.isEmpty()) {
+            playNextPlaylistTrack();
+        }
+    }
+
+    private void playNextPlaylistTrack() {
+        if (playlist == null || playlist.isEmpty()) return;
+
+        // Vòng lặp lại từ đầu nếu đã hết danh sách
+        if (currentTrackIndex >= playlist.size()) {
+            currentTrackIndex = 0;
+        }
+
+        String fileName = playlist.get(currentTrackIndex);
+
+        try {
+            URL url = getClass().getResource("/Sounds/" + fileName);
+            if (url != null) {
+                AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+
+                // Đóng clip của bài cũ (Chỉ đóng playlistClip)
+                if (playlistClip != null) {
+                    playlistClip.stop();
+                    playlistClip.close();
+                }
+
+                playlistClip = AudioSystem.getClip();
+                playlistClip.open(ais);
+
+                playlistClip.addLineListener(new LineListener() {
+                    @Override
+                    public void update(LineEvent event) {
+                        if (event.getType() == LineEvent.Type.STOP) {
+                            event.getLine().close();
+
+                            if (playlist != null) {
+                                currentTrackIndex++;
+                                playNextPlaylistTrack();
+                            }
+                        }
+                    }
+                });
+
+                playlistClip.start();
+
+            } else {
+                System.out.println("Lỗi Playlist - Không tìm thấy: " + fileName);
+                currentTrackIndex++;
+                playNextPlaylistTrack();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopPlaylist() {
+        this.playlist = null;
+        if (playlistClip != null) {
+            playlistClip.stop();
+            playlistClip.close();
+        }
     }
 }
